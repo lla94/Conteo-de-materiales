@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Conteo de Materiales</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box} body{margin:0;background:#f4f5f7;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input{font-family:inherit}.app{max-width:620px;margin:auto;padding:16px 13px 125px}
@@ -64,7 +65,7 @@ button,input{font-family:inherit}.app{max-width:620px;margin:auto;padding:16px 1
 
 <div class="bottom" id="bottomBar" style="display:none">
 <div class="total"><span>TOTAL DEL PEDIDO</span><strong id="grand">$0</strong></div>
-<div class="buttons"><button class="btn light" onclick="resetAll()">Reiniciar cantidades</button><button class="btn dark" onclick="goHome()">Salir sin finalizar</button></div>
+<div class="buttons"><button class="btn light" onclick="resetAll()">Reiniciar cantidades</button><button class="btn orange" onclick="generatePDF()">PDF del pedido</button></div>
 </div>
 </div>
 
@@ -111,8 +112,33 @@ function change(i,d){qty[i]=Math.max(0,(qty[i]||0)+d);localStorage.setItem("qty_
 function changePrice(i,v){let n=parseFloat(v);if(!Number.isFinite(n)||n<0)n=0;mats[i].price=Math.round(n);localStorage.setItem("mats_v4",JSON.stringify(mats));renderFamilies()}
 function calc(){let total=0;mats.forEach((m,i)=>{total+=(qty[i]||0)*(m.price||0)});document.getElementById("grand").textContent=money(total);return total}
 function resetAll(){if(confirm("¿Reiniciar todas las cantidades de este pedido?")){qty=Array(mats.length).fill(0);localStorage.setItem("qty_v4",JSON.stringify(qty));renderFamilies()}}
+function generatePDF(saleOverride=null){
+let order=saleOverride?saleOverride.order:currentOrder;
+let items=saleOverride?saleOverride.items:mats.map((m,i)=>({name:m.name,price:m.price,qty:qty[i]||0,total:(qty[i]||0)*m.price})).filter(x=>x.qty>0);
+if(!order){alert("No hay un pedido para generar.");return}
+if(!items.length){alert("No hay referencias con cantidades para generar el PDF.");return}
+const {jsPDF}=window.jspdf; const doc=new jsPDF({unit:"mm",format:"a4"});
+let y=18,total=items.reduce((a,x)=>a+x.total,0);
+doc.setFillColor(17,24,39);doc.roundedRect(14,12,182,28,5,5,"F");
+doc.setTextColor(255,255,255);doc.setFontSize(19);doc.setFont(undefined,"bold");doc.text("CONTEO DE MATERIALES",105,24,{align:"center"});
+doc.setFontSize(11);doc.setFont(undefined,"normal");doc.text(order,105,32,{align:"center"});
+doc.setTextColor(17,24,39);doc.setFontSize(10);doc.text("Resumen del pedido",14,48);
+doc.setTextColor(100,116,139);doc.text("Fecha: "+(saleOverride?saleOverride.date:new Date().toLocaleString("es-CO")),14,54);
+y=64;doc.setFillColor(241,245,249);doc.roundedRect(14,y-6,182,10,2,2,"F");
+doc.setTextColor(51,65,85);doc.setFont(undefined,"bold");doc.text("REFERENCIA",17,y);doc.text("CANT.",128,y,{align:"right"});doc.text("V. UNIT.",160,y,{align:"right"});doc.text("TOTAL",193,y,{align:"right"});
+y+=9;doc.setFont(undefined,"normal");doc.setTextColor(17,24,39);
+items.forEach(x=>{
+ if(y>270){doc.addPage();y=18}
+ let name=x.name; if(name.length>38) name=name.slice(0,35)+"...";
+ doc.text(name,17,y);doc.text(String(x.qty),128,y,{align:"right"});doc.text(money(x.price),160,y,{align:"right"});doc.text(money(x.total),193,y,{align:"right"});y+=7;
+});
+doc.setDrawColor(203,213,225);doc.line(14,y,196,y);y+=9;
+doc.setFont(undefined,"bold");doc.setFontSize(13);doc.text("TOTAL PEDIDO",150,y,{align:"right"});doc.text(money(total),193,y,{align:"right"});
+doc.setFont(undefined,"normal");doc.setFontSize(9);doc.setTextColor(100,116,139);doc.text("Documento generado por Conteo de Materiales",14,287);
+doc.save(order.replace(/[^a-z0-9]+/gi,"_")+"_Resumen.pdf");
+}
 function finishSale(){let items=mats.map((m,i)=>({name:m.name,price:m.price,qty:qty[i]||0,total:(qty[i]||0)*m.price})).filter(x=>x.qty>0);if(!currentOrder){alert("No hay un pedido activo.");return}if(!items.length){alert("Todavía no hay unidades contadas.");return}let total=items.reduce((a,x)=>a+x.total,0);sales.unshift({id:Date.now(),order:currentOrder,date:new Date().toLocaleString("es-CO"),items,total});sales=sales.slice(0,100);localStorage.setItem("sales_v4",JSON.stringify(sales));currentOrder="";qty=Array(mats.length).fill(0);localStorage.removeItem("current_order_v4");localStorage.removeItem("qty_v4");document.getElementById("bottomBar").style.display="none";alert("Venta finalizada y guardada correctamente.");document.getElementById("orderName").value="";showScreen("home");renderHomeHistory()}
-function renderHist(){let e=document.getElementById("hist");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';return}sales.forEach((s,i)=>{let c=document.createElement("div");c.className="card history";c.innerHTML=`<div class="muted">${s.date}</div><div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div><div class="h-total">${money(s.total)}</div><div style="margin-top:10px">${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}</div><button class="btn light" style="margin-top:8px;width:100%" onclick="delSale(${i})">Eliminar</button>`;e.appendChild(c)})}
+function renderHist(){let e=document.getElementById("hist");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';return}sales.forEach((s,i)=>{let c=document.createElement("div");c.className="card history";c.innerHTML=`<div class="muted">${s.date}</div><div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div><div class="h-total">${money(s.total)}</div><div style="margin-top:10px">${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}</div><div style="display:flex;gap:7px;margin-top:8px"><button class="btn dark" style="flex:1" onclick="generatePDF(sales[${i}])">Descargar PDF</button><button class="btn light" style="flex:1" onclick="delSale(${i})">Eliminar</button></div>`;e.appendChild(c)})}
 function renderHomeHistory(){let e=document.getElementById("homeHistory");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="saved-empty">Todavía no hay ventas finalizadas.</div>';return}sales.slice(0,8).forEach(s=>{let d=document.createElement("div");d.className="saved-row";d.innerHTML=`<div class="saved-order-name">${s.order}</div><div class="saved-order-date">${s.date}</div><div class="saved-order-total">${money(s.total)}</div>`;e.appendChild(d)})}
 function delSale(i){if(confirm("¿Eliminar esta venta del historial?")){sales.splice(i,1);localStorage.setItem("sales_v4",JSON.stringify(sales));renderHist();renderHomeHistory()}}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.v).classList.add("active");renderHist()});
