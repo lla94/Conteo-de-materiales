@@ -63,9 +63,28 @@ button,input{font-family:inherit}.app{max-width:620px;margin:auto;padding:16px 1
 <section id="history" class="view"><div id="hist"></div></section>
 </section>
 
+
+<div id="summaryOverlay" style="display:none;position:fixed;inset:0;background:#f4f5f7;z-index:30;overflow:auto">
+  <div style="max-width:620px;margin:auto;padding:18px 13px 35px">
+    <button class="back" onclick="closeSummary()">← Volver</button>
+    <div class="head">
+      <h1>Resumen de venta</h1>
+      <div class="order-pill" id="summaryOrder">Pedido</div>
+    </div>
+    <div class="card">
+      <div class="muted" id="summaryDate"></div>
+      <div id="summaryItems" style="margin-top:12px"></div>
+      <div style="border-top:1px solid #cbd5e1;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;font-size:18px;font-weight:950">
+        <span>TOTAL PEDIDO</span><span id="summaryTotal"></span>
+      </div>
+    </div>
+    <button class="finish" onclick="downloadCurrentSummaryPDF()">Descargar PDF</button>
+  </div>
+</div>
+
 <div class="bottom" id="bottomBar" style="display:none">
 <div class="total"><span>TOTAL DEL PEDIDO</span><strong id="grand">$0</strong></div>
-<div class="buttons"><button class="btn light" onclick="resetAll()">Reiniciar cantidades</button><button class="btn orange" onclick="generatePDF()">PDF del pedido</button></div>
+<div class="buttons"><button class="btn light" onclick="resetAll()">Reiniciar cantidades</button></div>
 </div>
 </div>
 
@@ -138,8 +157,26 @@ doc.setFont(undefined,"normal");doc.setFontSize(9);doc.setTextColor(100,116,139)
 doc.save(order.replace(/[^a-z0-9]+/gi,"_")+"_Resumen.pdf");
 }
 function finishSale(){let items=mats.map((m,i)=>({name:m.name,price:m.price,qty:qty[i]||0,total:(qty[i]||0)*m.price})).filter(x=>x.qty>0);if(!currentOrder){alert("No hay un pedido activo.");return}if(!items.length){alert("Todavía no hay unidades contadas.");return}let total=items.reduce((a,x)=>a+x.total,0);sales.unshift({id:Date.now(),order:currentOrder,date:new Date().toLocaleString("es-CO"),items,total});sales=sales.slice(0,100);localStorage.setItem("sales_v4",JSON.stringify(sales));currentOrder="";qty=Array(mats.length).fill(0);localStorage.removeItem("current_order_v4");localStorage.removeItem("qty_v4");document.getElementById("bottomBar").style.display="none";alert("Venta finalizada y guardada correctamente.");document.getElementById("orderName").value="";showScreen("home");renderHomeHistory()}
-function renderHist(){let e=document.getElementById("hist");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';return}sales.forEach((s,i)=>{let c=document.createElement("div");c.className="card history";c.innerHTML=`<div class="muted">${s.date}</div><div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div><div class="h-total">${money(s.total)}</div><div style="margin-top:10px">${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}</div><div style="display:flex;gap:7px;margin-top:8px"><button class="btn dark" style="flex:1" onclick="generatePDF(sales[${i}])">Descargar PDF</button><button class="btn light" style="flex:1" onclick="delSale(${i})">Eliminar</button></div>`;e.appendChild(c)})}
-function renderHomeHistory(){let e=document.getElementById("homeHistory");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="saved-empty">Todavía no hay ventas finalizadas.</div>';return}sales.slice(0,8).forEach(s=>{let d=document.createElement("div");d.className="saved-row";d.innerHTML=`<div class="saved-order-name">${s.order}</div><div class="saved-order-date">${s.date}</div><div class="saved-order-total">${money(s.total)}</div>`;e.appendChild(d)})}
+function renderHist(){let e=document.getElementById("hist");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';return}sales.forEach((s,i)=>{let c=document.createElement("div");c.className="card history";c.innerHTML=`<div class="muted">${s.date}</div><div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div><div class="h-total">${money(s.total)}</div><div style="margin-top:10px">${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}</div><div style="display:flex;gap:7px;margin-top:8px"><button class="btn dark" style="flex:1" onclick="viewSale(${i})">Ver resumen</button><button class="btn light" style="flex:1" onclick="delSale(${i})">Eliminar</button></div>`;e.appendChild(c)})}
+function renderHomeHistory(){let e=document.getElementById("homeHistory");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="saved-empty">Todavía no hay ventas finalizadas.</div>';return}sales.slice(0,8).forEach((s,i)=>{let d=document.createElement("div");d.className="saved-row";d.innerHTML=`<div class="saved-order-name">${s.order}</div><div class="saved-order-date">${s.date}</div><div class="saved-order-total">${money(s.total)}</div><button class="btn dark" style="width:100%;margin-top:8px" onclick="viewSale(${i})">Ver resumen</button>`;e.appendChild(d)})}
+
+let selectedSale=null;
+function viewSale(index){
+  selectedSale=sales[index];
+  document.getElementById("summaryOrder").textContent=selectedSale.order;
+  document.getElementById("summaryDate").textContent=selectedSale.date;
+  document.getElementById("summaryTotal").textContent=money(selectedSale.total);
+  let box=document.getElementById("summaryItems"); box.innerHTML="";
+  selectedSale.items.forEach(x=>{
+    let row=document.createElement("div");row.className="summary-row";
+    row.innerHTML=`<span><b>${x.name}</b><br><span class="muted">${x.qty} unidad(es) × ${money(x.price)}</span></span><b>${money(x.total)}</b>`;
+    box.appendChild(row);
+  });
+  document.getElementById("summaryOverlay").style.display="block";
+}
+function closeSummary(){document.getElementById("summaryOverlay").style.display="none";selectedSale=null}
+function downloadCurrentSummaryPDF(){if(selectedSale)generatePDF(selectedSale)}
+
 function delSale(i){if(confirm("¿Eliminar esta venta del historial?")){sales.splice(i,1);localStorage.setItem("sales_v4",JSON.stringify(sales));renderHist();renderHomeHistory()}}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.v).classList.add("active");renderHist()});
 renderHomeHistory();renderFilters();
