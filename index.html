@@ -8,317 +8,115 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Conteo de Materiales</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f4f5f7;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input{font-family:inherit}
-.app{max-width:560px;margin:auto;padding:18px 14px 120px}
+*{box-sizing:border-box} body{margin:0;background:#f4f5f7;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font-family:inherit}.app{max-width:620px;margin:auto;padding:16px 13px 125px}
 .screen{display:none}.screen.active{display:block}
-.welcome{min-height:calc(100vh - 36px);display:flex;align-items:center;justify-content:center}
+.welcome{min-height:calc(100vh - 32px);display:flex;align-items:center;justify-content:center}
 .welcome-card{width:100%;background:#111827;color:#fff;border-radius:25px;padding:26px 22px;box-shadow:0 12px 35px #00000018}
-.logo-title{text-align:center;font-size:29px;font-weight:950;margin:0 0 8px}
-.logo-sub{text-align:center;color:#cbd5e1;font-size:13px;margin:0 0 28px}
-.order-label{display:block;font-size:13px;font-weight:800;color:#e5e7eb;margin-bottom:7px}
-.order-input{width:100%;border:1px solid #475569;background:#fff;color:#111827;border-radius:13px;padding:14px;font-size:17px;outline:none}
+.logo-title{text-align:center;font-size:29px;font-weight:950;margin:0 0 8px}.logo-sub{text-align:center;color:#cbd5e1;font-size:13px;margin:0 0 28px}
+.order-label{display:block;font-size:13px;font-weight:800;color:#e5e7eb;margin-bottom:7px}.order-input{width:100%;border:1px solid #475569;background:#fff;color:#111827;border-radius:13px;padding:14px;font-size:17px;outline:none}
 .start-btn{width:100%;margin-top:14px;border:0;border-radius:14px;padding:14px;background:#f97316;color:#fff;font-size:16px;font-weight:950}
-.saved-orders{margin-top:20px;background:#fff;color:#111827;border-radius:17px;padding:14px}
-.saved-title{font-size:13px;font-weight:950;margin-bottom:8px}
-.saved-empty{font-size:12px;color:#64748b}
-.saved-row{border-top:1px solid #e5e7eb;padding:10px 0}
-.saved-row:first-child{border-top:0}
-.saved-order-name{font-weight:900;font-size:13px}
-.saved-order-date{font-size:11px;color:#64748b;margin-top:2px}
-.saved-order-total{font-weight:950;margin-top:4px}
-.head{background:#111827;color:#fff;border-radius:22px;padding:20px;margin-bottom:12px;text-align:center}
-.head h1{margin:0;font-size:24px;font-weight:950}
-.order-pill{display:inline-block;margin-top:9px;background:#334155;color:#fff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:900}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:15px;padding:4px;margin-bottom:12px}
-.tab{padding:10px;border:0;background:none;border-radius:11px;font-weight:900;color:#64748b}
-.tab.active{background:#111827;color:#fff}
-.view{display:none}.view.active{display:block}
-.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:10px;box-shadow:0 2px 10px #0000000b}
-.top{display:flex;justify-content:space-between;gap:12px}
-.name{font-size:15px;font-weight:950}
-.price{font-size:12px;color:#64748b;margin-top:4px}
-.subtotal{text-align:right;font-weight:950}.subtotal small{display:block;font-size:10px;color:#94a3b8;margin-bottom:2px}
-.price-edit{margin-top:10px}
-.price-edit label{display:block;font-size:10px;color:#64748b;font-weight:800;margin-bottom:4px}
-.price-input{width:100%;padding:9px 10px;border:1px solid #d1d5db;border-radius:10px;font-size:15px}
-.counter{display:grid;grid-template-columns:58px 1fr 58px;gap:10px;align-items:center;margin-top:14px}
-.counter button{height:50px;border:0;border-radius:15px;font-size:27px;font-weight:700;background:#e5e7eb;color:#111827}
-.counter button.plus{background:#111827;color:#fff}
-.count{text-align:center;font-size:28px;font-weight:950}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;box-shadow:0 -6px 24px #00000018;padding:12px max(14px,calc((100vw - 560px)/2 + 14px));z-index:10}
-.total{display:flex;justify-content:space-between;align-items:center}.total span{font-size:11px;color:#64748b}.total strong{font-size:23px}
-.buttons{display:flex;gap:8px;margin-top:9px}.btn{flex:1;border:0;border-radius:12px;padding:11px;font-weight:950}.dark{background:#111827;color:#fff}.light{background:#e5e7eb;color:#111827}.orange{background:#f97316;color:#fff}
+.saved-orders{margin-top:20px;background:#fff;color:#111827;border-radius:17px;padding:14px}.saved-title{font-size:13px;font-weight:950;margin-bottom:8px}.saved-empty{font-size:12px;color:#64748b}
+.saved-row{border-top:1px solid #e5e7eb;padding:10px 0}.saved-row:first-child{border-top:0}.saved-order-name{font-weight:900;font-size:13px}.saved-order-date{font-size:11px;color:#64748b;margin-top:2px}.saved-order-total{font-weight:950;margin-top:4px}
+.head{background:#111827;color:#fff;border-radius:22px;padding:20px;margin-bottom:12px;text-align:center}.head h1{margin:0;font-size:24px;font-weight:950}.order-pill{display:inline-block;margin-top:9px;background:#334155;color:#fff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:900}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-radius:15px;padding:4px;margin-bottom:12px}.tab{padding:10px;border:0;background:none;border-radius:11px;font-weight:900;color:#64748b}.tab.active{background:#111827;color:#fff}
+.view{display:none}.view.active{display:block}.notice{background:#eef2ff;color:#3730a3;border-radius:13px;padding:11px;font-size:12px;margin-bottom:12px}
+.family{background:#fff;border-radius:17px;margin-bottom:10px;overflow:hidden;box-shadow:0 2px 10px #0000000b}.family-head{width:100%;border:0;background:#fff;padding:15px 15px;display:flex;align-items:center;justify-content:space-between;text-align:left}.family-name{font-size:15px;font-weight:950}.family-count{font-size:11px;color:#64748b;margin-top:3px}.chev{font-size:18px;color:#64748b;font-weight:900}
+.family-body{padding:0 10px 10px}.family.closed .family-body{display:none}.family.closed .chev{transform:rotate(-90deg)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mat-card{border:1px solid #e5e7eb;border-radius:14px;padding:11px;background:#fff;min-width:0}.mat-name{font-size:13px;font-weight:950;line-height:1.15;min-height:30px}.price{font-size:10px;color:#64748b;margin-top:3px}.subtotal{font-size:11px;font-weight:950;margin-top:8px}.subtotal small{font-size:9px;color:#94a3b8;margin-right:3px}
+.price-edit{margin-top:7px}.price-input{width:100%;padding:7px 8px;border:1px solid #d1d5db;border-radius:9px;font-size:13px}
+.counter{display:grid;grid-template-columns:40px 1fr 40px;gap:6px;align-items:center;margin-top:9px}.counter button{height:39px;border:0;border-radius:11px;font-size:21px;font-weight:800;background:#e5e7eb;color:#111827}.counter button.plus{background:#111827;color:#fff}.count{text-align:center;font-size:21px;font-weight:950}
+.total-items{font-size:11px;color:#64748b;margin-top:8px}.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;box-shadow:0 -6px 24px #00000018;padding:10px max(13px,calc((100vw - 620px)/2 + 13px));z-index:10}
+.total{display:flex;justify-content:space-between;align-items:center}.total span{font-size:10px;color:#64748b}.total strong{font-size:22px}.buttons{display:flex;gap:7px;margin-top:8px}.btn{flex:1;border:0;border-radius:11px;padding:10px;font-weight:950}.dark{background:#111827;color:#fff}.light{background:#e5e7eb;color:#111827}.orange{background:#f97316;color:#fff}
 .finish{width:100%;margin-top:10px;border:0;border-radius:13px;padding:13px;background:#f97316;color:#fff;font-weight:950}
-.history{padding:14px;border-left:4px solid #111827}
-.muted{color:#64748b;font-size:12px}.h-total{font-size:19px;font-weight:950;margin-top:3px}
-.empty{text-align:center;color:#64748b;padding:35px 10px}
-.summary-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin:7px 0}
-.summary-row b{font-weight:950}
-.notice{background:#eef2ff;color:#3730a3;border-radius:13px;padding:11px;font-size:12px;margin-bottom:12px}
-.section-title{font-size:14px;font-weight:950;margin:14px 0 9px}
-.danger{background:#fee2e2;color:#991b1b}
-.back{border:0;background:none;color:#64748b;font-weight:900;padding:6px 0;margin-bottom:8px}
+.history{padding:14px;border-left:4px solid #111827}.muted{color:#64748b;font-size:12px}.h-total{font-size:19px;font-weight:950;margin-top:3px}.summary-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin:7px 0}.summary-row b{font-weight:950}.empty{text-align:center;color:#64748b;padding:35px 10px}
+.search{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;margin-bottom:10px;font-size:14px;background:#fff}.filterbar{display:flex;gap:6px;overflow:auto;margin-bottom:10px}.filter{white-space:nowrap;border:0;background:#e5e7eb;color:#334155;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:900}.filter.active{background:#111827;color:#fff}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- INICIO -->
 <section id="home" class="screen active">
-  <div class="welcome">
-    <div class="welcome-card">
-      <h1 class="logo-title">Conteo de Materiales</h1>
-      <p class="logo-sub">Control de materiales por pedido</p>
-
-      <label class="order-label" for="orderName">Nombre del pedido / venta</label>
-      <input id="orderName" class="order-input" type="text" placeholder="Ej. Pedido 0001" autocomplete="off">
-      <button class="start-btn" onclick="startSale()">Iniciar venta</button>
-
-      <div class="saved-orders">
-        <div class="saved-title">Ventas finalizadas</div>
-        <div id="homeHistory"></div>
-      </div>
-    </div>
-  </div>
+<div class="welcome"><div class="welcome-card">
+<h1 class="logo-title">Conteo de Materiales</h1>
+<p class="logo-sub">Control de materiales por pedido</p>
+<label class="order-label" for="orderName">Nombre del pedido / venta</label>
+<input id="orderName" class="order-input" type="text" placeholder="Ej. Pedido 0001" autocomplete="off">
+<button class="start-btn onclick" onclick="startSale()">Iniciar venta</button>
+<div class="saved-orders"><div class="saved-title">Ventas finalizadas</div><div id="homeHistory"></div></div>
+</div></div>
 </section>
 
-<!-- CONTADOR -->
 <section id="appScreen" class="screen">
-  <div class="head">
-    <h1>Conteo de Materiales</h1>
-    <div class="order-pill" id="currentOrder">Pedido</div>
-  </div>
+<div class="head"><h1>Conteo de Materiales</h1><div class="order-pill" id="currentOrder">Pedido</div></div>
+<div class="tabs"><button class="tab active" data-v="count">Conteo</button><button class="tab" data-v="history">Historial</button></div>
 
-  <div class="tabs">
-    <button class="tab active" data-v="count">Conteo</button>
-    <button class="tab" data-v="history">Historial</button>
-  </div>
+<section id="count" class="view active">
+<div class="notice">Selecciona una familia para ver sus referencias. Cada referencia permite ajustar su valor y contar con <b>+</b> y <b>−</b>.</div>
+<input id="search" class="search" placeholder="Buscar referencia..." oninput="renderFamilies()">
+<div class="filterbar" id="filters"></div>
+<div id="families"></div>
+<button class="finish" onclick="finishSale()">Terminar conteo y finalizar venta</button>
+</section>
 
-  <section id="count" class="view active">
-    <div class="notice">En cada referencia puedes ajustar el valor unitario y contar las unidades con <b>+</b> y <b>−</b>.</div>
-    <div id="list"></div>
-    <button class="finish" onclick="finishSale()">Terminar conteo y finalizar venta</button>
-  </section>
-
-  <section id="history" class="view">
-    <div id="hist"></div>
-  </section>
+<section id="history" class="view"><div id="hist"></div></section>
 </section>
 
 <div class="bottom" id="bottomBar" style="display:none">
-  <div class="total"><span>TOTAL DEL PEDIDO</span><strong id="grand">$0</strong></div>
-  <div class="buttons">
-    <button class="btn light" onclick="resetAll()">Reiniciar cantidades</button>
-    <button class="btn dark" onclick="goHome()">Salir sin finalizar</button>
-  </div>
+<div class="total"><span>TOTAL DEL PEDIDO</span><strong id="grand">$0</strong></div>
+<div class="buttons"><button class="btn light" onclick="resetAll()">Reiniciar cantidades</button><button class="btn dark" onclick="goHome()">Salir sin finalizar</button></div>
 </div>
-
 </div>
 
 <script>
-const defaults=[
-["Tablex 15 ST",80000],
-["Tablex 15 RH",80000],
-["Tablex 15 ST laminado 1C",80000],
-["Tablex 15 ST laminado 2C",80000],
-["Tablex 15 RH laminado 1C",80000],
-["Tablex 15 RH laminado 2C",80000],
-["Tablex 18 ST",80000],
-["Tablex 18 RH",80000],
-["Tablex 18 ST laminado 1C",80000],
-["Tablex 18 ST laminado 2C",80000],
-["Tablex 18 RH laminado 1C",80000],
-["Tablex 18 RH laminado 2C",80000],
-["Tablex 20 - 36 ST",80000],
-["Tablex 20 - 36 RH",80000],
-["Tablex 20 - 36 ST laminado",80000],
-["Tablex 20 - 36 RH laminado",80000],
-["MDF 9 Liso",55000],
-["MDF 9 Pelo",40000],
-["MDF 12 Liso",65000],
-["MDF 12 Pelo",50000],
-["MDF 18 Liso",90000],
-["MDF 18 Liso RH",100000],
-["MDF 18 Pelo",60000],
-["Fondos ST",35000],
-["Fondos RH",35000],
-["Fondos laminados",70000]
+const raw=[
+["Tablex 15 ST",80000,"Tablex 15"],["Tablex 15 RH",80000,"Tablex 15"],["Tablex 15 ST laminado 1C",80000,"Tablex 15"],["Tablex 15 ST laminado 2C",80000,"Tablex 15"],["Tablex 15 RH laminado 1C",80000,"Tablex 15"],["Tablex 15 RH laminado 2C",80000,"Tablex 15"],
+["Tablex 18 ST",80000,"Tablex 18"],["Tablex 18 RH",80000,"Tablex 18"],["Tablex 18 ST laminado 1C",80000,"Tablex 18"],["Tablex 18 ST laminado 2C",80000,"Tablex 18"],["Tablex 18 RH laminado 1C",80000,"Tablex 18"],["Tablex 18 RH laminado 2C",80000,"Tablex 18"],
+["Tablex 20 - 36 ST",80000,"Tablex 20 - 36"],["Tablex 20 - 36 RH",80000,"Tablex 20 - 36"],["Tablex 20 - 36 ST laminado",80000,"Tablex 20 - 36"],["Tablex 20 - 36 RH laminado",80000,"Tablex 20 - 36"],
+["MDF 9 Liso",55000,"MDF"],["MDF 9 Pelo",40000,"MDF"],["MDF 12 Liso",65000,"MDF"],["MDF 12 Pelo",50000,"MDF"],["MDF 18 Liso",90000,"MDF"],["MDF 18 Liso RH",100000,"MDF"],["MDF 18 Pelo",60000,"MDF"],
+["Fondos ST",35000,"Fondos"],["Fondos RH",35000,"Fondos"],["Fondos laminados",70000,"Fondos"]
 ];
-
-let mats=JSON.parse(localStorage.getItem("mats_v3")||"null");
-if(!mats){
-  mats=defaults.map(x=>({name:x[0],price:x[1]}));
-  localStorage.setItem("mats_v3",JSON.stringify(mats));
-}
-let qty=Array(mats.length).fill(0);
-let currentOrder=localStorage.getItem("current_order_v3")||"";
-let sales=JSON.parse(localStorage.getItem("sales_v3")||"[]");
-
+let mats=JSON.parse(localStorage.getItem("mats_v4")||"null");
+if(!mats){mats=raw.map(x=>({name:x[0],price:x[1],family:x[2]}));localStorage.setItem("mats_v4",JSON.stringify(mats));}
+let qty=Array(mats.length).fill(0),currentOrder="",sales=JSON.parse(localStorage.getItem("sales_v4")||"[]"),openFamilies={};
 const money=n=>"$"+Math.round(n||0).toLocaleString("es-CO");
-
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-function startSale(){
-  const name=document.getElementById("orderName").value.trim();
-  if(!name){alert("Escribe el nombre del pedido, por ejemplo: Pedido 0001.");return;}
-  currentOrder=name;
-  qty=Array(mats.length).fill(0);
-  localStorage.setItem("current_order_v3",currentOrder);
-  localStorage.setItem("qty_v3",JSON.stringify(qty));
-  document.getElementById("currentOrder").textContent=currentOrder;
-  document.getElementById("bottomBar").style.display="block";
-  showScreen("appScreen");
-  render(); renderHist();
-}
-function goHome(){
-  if(confirm("¿Salir del pedido actual sin finalizarlo? El conteo actual se perderá.")){
-    currentOrder="";
-    qty=Array(mats.length).fill(0);
-    localStorage.removeItem("current_order_v3");
-    localStorage.removeItem("qty_v3");
-    document.getElementById("orderName").value="";
-    document.getElementById("bottomBar").style.display="none";
-    showScreen("home");
-    renderHomeHistory();
-  }
-}
-function render(){
- const list=document.getElementById("list"); list.innerHTML="";
- mats.forEach((m,i)=>{
-  const c=document.createElement("div");c.className="card";
-  c.innerHTML=`
-    <div class="top">
-      <div>
-        <div class="name">${m.name}</div>
-        <div class="price">Valor base: ${money(m.price)} / unidad</div>
-      </div>
-      <div class="subtotal"><small>SUBTOTAL</small><span id="s${i}">${money(0)}</span></div>
-    </div>
-    <div class="price-edit">
-      <label>Valor unitario aplicado (puedes modificarlo)</label>
-      <input class="price-input" id="p${i}" type="number" min="0" step="1000" value="${m.price}" onchange="changePrice(${i},this.value)">
-    </div>
-    <div class="counter">
-      <button onclick="change(${i},-1)">−</button>
-      <div class="count" id="q${i}">${qty[i]||0}</div>
-      <button class="plus" onclick="change(${i},1)">+</button>
-    </div>`;
-  list.appendChild(c);
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function startSale(){let n=document.getElementById("orderName").value.trim();if(!n){alert("Escribe el nombre del pedido, por ejemplo: Pedido 0001.");return}currentOrder=n;qty=Array(mats.length).fill(0);localStorage.setItem("current_order_v4",n);localStorage.setItem("qty_v4",JSON.stringify(qty));document.getElementById("currentOrder").textContent=n;document.getElementById("bottomBar").style.display="block";showScreen("appScreen");renderFamilies();renderHist()}
+function goHome(){if(confirm("¿Salir del pedido actual sin finalizarlo? El conteo actual se perderá.")){currentOrder="";qty=Array(mats.length).fill(0);localStorage.removeItem("current_order_v4");localStorage.removeItem("qty_v4");document.getElementById("bottomBar").style.display="none";showScreen("home");renderHomeHistory()}}
+function families(){return [...new Set(mats.map(m=>m.family))]}
+function renderFilters(){let e=document.getElementById("filters");e.innerHTML="";["TODOS",...families()].forEach((f,i)=>{let b=document.createElement("button");b.className="filter"+(i===0?" active":"");b.textContent=f;b.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderFamilies(f)};e.appendChild(b)})}
+let selectedFamily="TODOS";
+function renderFamilies(forceFamily=null){
+if(forceFamily!==null)selectedFamily=forceFamily;
+let search=(document.getElementById("search")?.value||"").toLowerCase().trim(),e=document.getElementById("families");e.innerHTML="";
+let fs=selectedFamily==="TODOS"?families():[selectedFamily];
+fs.forEach(f=>{
+ let indices=mats.map((m,i)=>m.family===f&&(!search||m.name.toLowerCase().includes(search))?i:-1).filter(i=>i>=0);
+ if(!indices.length)return;
+ let fam=document.createElement("div");fam.className="family"+(openFamilies[f]===false?" closed":"");
+ let totalUnits=indices.reduce((a,i)=>a+(qty[i]||0),0);
+ fam.innerHTML=`<button class="family-head" onclick="toggleFamily('${f.replaceAll("'","\\'")}')"><div><div class="family-name">${f}</div><div class="family-count">${indices.length} referencias · ${totalUnits} unidades contadas</div></div><div class="chev">⌄</div></button><div class="family-body"><div class="grid" id="grid-${f.replaceAll(" ","-")}"></div></div>`;
+ e.appendChild(fam);
+ let grid=fam.querySelector(".grid");
+ indices.forEach(i=>{
+  let m=mats[i],c=document.createElement("div");c.className="mat-card";
+  c.innerHTML=`<div class="mat-name">${m.name}</div><div class="price">Base: ${money(m.price)}</div><div class="price-edit"><input class="price-input" type="number" min="0" step="1000" value="${m.price}" onchange="changePrice(${i},this.value)"></div><div class="subtotal"><small>SUBTOTAL</small><span id="s${i}">${money((qty[i]||0)*m.price)}</span></div><div class="counter"><button onclick="change(${i},-1)">−</button><div class="count" id="q${i}">${qty[i]||0}</div><button class="plus" onclick="change(${i},1)">+</button></div>`;
+  grid.appendChild(c);
  });
- calc();
-}
-function change(i,d){
-  qty[i]=Math.max(0,(qty[i]||0)+d);
-  localStorage.setItem("qty_v3",JSON.stringify(qty));
-  calc();
-}
-function changePrice(i,val){
-  let n=parseFloat(val);
-  if(!Number.isFinite(n)||n<0)n=0;
-  mats[i].price=Math.round(n);
-  localStorage.setItem("mats_v3",JSON.stringify(mats));
-  calc();
-}
-function calc(){
- let total=0;
- mats.forEach((m,i)=>{
-   let s=(qty[i]||0)*(m.price||0); total+=s;
-   let e=document.getElementById("s"+i),q=document.getElementById("q"+i);
-   if(e)e.textContent=money(s);
-   if(q)q.textContent=qty[i]||0;
- });
- document.getElementById("grand").textContent=money(total);
- return total;
-}
-function resetAll(){
- if(confirm("¿Reiniciar todas las cantidades de este pedido?")){
-   qty=Array(mats.length).fill(0);
-   localStorage.setItem("qty_v3",JSON.stringify(qty));
-   render();
- }
-}
-function finishSale(){
- let items=mats.map((m,i)=>({
-   name:m.name,
-   price:m.price,
-   qty:qty[i]||0,
-   total:(qty[i]||0)*(m.price||0)
- })).filter(x=>x.qty>0);
-
- if(!currentOrder){alert("No hay un pedido activo.");return;}
- if(!items.length){alert("Todavía no hay unidades contadas.");return;}
-
- let total=items.reduce((a,x)=>a+x.total,0);
- let sale={
-   id:Date.now(),
-   order:currentOrder,
-   date:new Date().toLocaleString("es-CO"),
-   items,
-   total
- };
- sales.unshift(sale);
- sales=sales.slice(0,100);
- localStorage.setItem("sales_v3",JSON.stringify(sales));
-
- currentOrder="";
- qty=Array(mats.length).fill(0);
- localStorage.removeItem("current_order_v3");
- localStorage.removeItem("qty_v3");
- document.getElementById("bottomBar").style.display="none";
-
- alert("Venta finalizada y guardada correctamente.");
- document.getElementById("orderName").value="";
- showScreen("home");
- renderHomeHistory();
-}
-function renderHist(){
- const e=document.getElementById("hist");e.innerHTML="";
- if(!sales.length){
-   e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';
-   return;
- }
- sales.forEach((s,i)=>{
-  let c=document.createElement("div");c.className="card history";
-  c.innerHTML=`
-   <div class="muted">${s.date}</div>
-   <div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div>
-   <div class="h-total">${money(s.total)}</div>
-   <div style="margin-top:10px">
-     ${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}
-   </div>
-   <button class="btn light" style="margin-top:8px;width:100%" onclick="delSale(${i})">Eliminar</button>`;
-  e.appendChild(c);
- });
-}
-function renderHomeHistory(){
- const e=document.getElementById("homeHistory");e.innerHTML="";
- if(!sales.length){e.innerHTML='<div class="saved-empty">Todavía no hay ventas finalizadas.</div>';return;}
- sales.slice(0,8).forEach(s=>{
-  let d=document.createElement("div");d.className="saved-row";
-  d.innerHTML=`<div class="saved-order-name">${s.order}</div><div class="saved-order-date">${s.date}</div><div class="saved-order-total">${money(s.total)}</div>`;
-  e.appendChild(d);
- });
-}
-function delSale(i){
- if(confirm("¿Eliminar esta venta del historial?")){
-   sales.splice(i,1);
-   localStorage.setItem("sales_v3",JSON.stringify(sales));
-   renderHist();renderHomeHistory();
- }
-}
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
- document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");
- document.getElementById(b.dataset.v).classList.add("active");
- renderHist();
 });
-
-renderHomeHistory();
+calc();renderFilters();
+}
+function toggleFamily(f){openFamilies[f]=openFamilies[f]===false?true:false;renderFamilies()}
+function change(i,d){qty[i]=Math.max(0,(qty[i]||0)+d);localStorage.setItem("qty_v4",JSON.stringify(qty));renderFamilies()}
+function changePrice(i,v){let n=parseFloat(v);if(!Number.isFinite(n)||n<0)n=0;mats[i].price=Math.round(n);localStorage.setItem("mats_v4",JSON.stringify(mats));renderFamilies()}
+function calc(){let total=0;mats.forEach((m,i)=>{total+=(qty[i]||0)*(m.price||0)});document.getElementById("grand").textContent=money(total);return total}
+function resetAll(){if(confirm("¿Reiniciar todas las cantidades de este pedido?")){qty=Array(mats.length).fill(0);localStorage.setItem("qty_v4",JSON.stringify(qty));renderFamilies()}}
+function finishSale(){let items=mats.map((m,i)=>({name:m.name,price:m.price,qty:qty[i]||0,total:(qty[i]||0)*m.price})).filter(x=>x.qty>0);if(!currentOrder){alert("No hay un pedido activo.");return}if(!items.length){alert("Todavía no hay unidades contadas.");return}let total=items.reduce((a,x)=>a+x.total,0);sales.unshift({id:Date.now(),order:currentOrder,date:new Date().toLocaleString("es-CO"),items,total});sales=sales.slice(0,100);localStorage.setItem("sales_v4",JSON.stringify(sales));currentOrder="";qty=Array(mats.length).fill(0);localStorage.removeItem("current_order_v4");localStorage.removeItem("qty_v4");document.getElementById("bottomBar").style.display="none";alert("Venta finalizada y guardada correctamente.");document.getElementById("orderName").value="";showScreen("home");renderHomeHistory()}
+function renderHist(){let e=document.getElementById("hist");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="card empty">No hay ventas finalizadas.</div>';return}sales.forEach((s,i)=>{let c=document.createElement("div");c.className="card history";c.innerHTML=`<div class="muted">${s.date}</div><div style="font-size:16px;font-weight:950;margin-top:3px">${s.order}</div><div class="h-total">${money(s.total)}</div><div style="margin-top:10px">${s.items.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}<br><span class="muted">${money(x.price)} / unidad</span></span><b>${money(x.total)}</b></div>`).join("")}</div><button class="btn light" style="margin-top:8px;width:100%" onclick="delSale(${i})">Eliminar</button>`;e.appendChild(c)})}
+function renderHomeHistory(){let e=document.getElementById("homeHistory");e.innerHTML="";if(!sales.length){e.innerHTML='<div class="saved-empty">Todavía no hay ventas finalizadas.</div>';return}sales.slice(0,8).forEach(s=>{let d=document.createElement("div");d.className="saved-row";d.innerHTML=`<div class="saved-order-name">${s.order}</div><div class="saved-order-date">${s.date}</div><div class="saved-order-total">${money(s.total)}</div>`;e.appendChild(d)})}
+function delSale(i){if(confirm("¿Eliminar esta venta del historial?")){sales.splice(i,1);localStorage.setItem("sales_v4",JSON.stringify(sales));renderHist();renderHomeHistory()}}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.getElementById(b.dataset.v).classList.add("active");renderHist()});
+renderHomeHistory();renderFilters();
 </script>
 </body>
 </html>
