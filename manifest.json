@@ -1,9 +1,9 @@
 {
-  "name": "Conteo de Materiales",
-  "short_name": "Materiales",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#f4f5f7",
-  "theme_color": "#111827",
-  "icons": []
+  "name":"Conteo de Materiales",
+  "short_name":"Conteo Materiales",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f4f5f7",
+  "theme_color":"#111827",
+  "lang":"es-CO"
 }
